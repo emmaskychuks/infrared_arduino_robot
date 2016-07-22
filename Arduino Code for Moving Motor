@@ -1,0 +1,119 @@
+#include <NewPing.h>
+//Back Wheel
+const int motor1Pin = 5;    
+const int motor2Pin = 10;    
+const int enablePin = 9;   
+const int enablePin2 = 11;
+const int motor1Pin2 = 13;
+const int motor2Pin2 = 12;
+
+
+
+// Front Wheel
+const int MOTOR1PIN = 13;
+const int MOTOR2PIN = 12;
+const int ENABLEPIN = 9;
+const int ENABLEPIN2 = 11;
+const int MOTOR1PIN2 = 5;
+const int MOTOR2PIN2 = 10;
+
+//Front Sensor
+const int trigPin = 2;
+const int echoPin = 6;
+
+// LED
+const int ledPin = 3; //Green
+const int ledPin2 = 4; //Red
+
+void setup() 
+{
+    Serial.begin(9600);
+  // set the switch as an input:
+    
+ // set all the other pins you're using as outputs:
+    pinMode(motor1Pin, OUTPUT);
+    pinMode(motor2Pin, OUTPUT);
+    pinMode(enablePin, OUTPUT);
+
+    pinMode(motor1Pin2, OUTPUT);
+    pinMode(motor2Pin2, OUTPUT);
+    pinMode(enablePin2, OUTPUT);
+
+    pinMode(MOTOR1PIN, OUTPUT);
+    pinMode(MOTOR2PIN, OUTPUT);
+    pinMode(ENABLEPIN, OUTPUT);
+
+    pinMode(MOTOR1PIN2, OUTPUT);
+    pinMode(MOTOR2PIN2, OUTPUT);
+    pinMode(ENABLEPIN2, OUTPUT);
+    
+   pinMode(ledPin, OUTPUT);
+   pinMode(ledPin2, OUTPUT);
+
+  pinMode(trigPin, OUTPUT);
+  pinMode(echoPin, INPUT);
+ 
+}
+
+void loop() 
+{
+   // set enablePin high so that motor can turn on:
+  long duration, distance;
+  long duration2, distance2; // For calc dist. for second sensor
+  long duration3, distance3;
+  // Front Sensor Code
+  digitalWrite(trigPin, LOW);  // Added this line
+  delayMicroseconds(2); // Added this line
+  digitalWrite(trigPin, HIGH);
+  delayMicroseconds(10); // Added this line
+  digitalWrite(trigPin, LOW);
+  duration = pulseIn(echoPin, HIGH);
+  distance = (duration/2) / 29.1;
+  
+  // Forward Movement
+  Serial.println("Enabling Motors");
+  digitalWrite(enablePin, HIGH);
+  digitalWrite(enablePin2, HIGH);
+  digitalWrite(ENABLEPIN, HIGH);
+  digitalWrite(ENABLEPIN2, HIGH);
+
+   if (distance < 10)
+   {
+    // Turn red led light on
+   digitalWrite(ledPin, LOW); 
+   digitalWrite(ledPin2, HIGH);
+  
+   digitalWrite(motor1Pin, LOW);   // set leg 1 of the H-bridge low
+   digitalWrite(motor2Pin,  LOW);  // set leg 2 of the H-bridge high
+   digitalWrite(motor1Pin2, LOW);   // set leg 1 of the H-bridge side 2 low
+   digitalWrite(motor2Pin2,  LOW);  // set leg 2 of the H-bridge side 2 high
+   digitalWrite(MOTOR1PIN, LOW);   // set leg 1 of the H-bridge low
+   digitalWrite(MOTOR2PIN,  LOW);  // set leg 2 of the H-bridge high
+   digitalWrite(MOTOR1PIN2, LOW);   // set leg 1 of the H-bridge side 2 low
+   digitalWrite(MOTOR2PIN2,  LOW);  // set leg 2 of the H-bridge side 2 high
+   }
+   else
+   {
+      digitalWrite(ledPin2, LOW); // Turn GREEN led light on
+      digitalWrite(ledPin, HIGH); 
+      
+      digitalWrite(motor1Pin, LOW);   // set leg 1 of the H-bridge low
+      digitalWrite(motor2Pin, HIGH);  // set leg 2 of the H-bridge high
+      digitalWrite(motor1Pin2, LOW);   // set leg 1 of the H-bridge side 2 low
+      digitalWrite(motor2Pin2, HIGH);  // set leg 2 of the H-bridge side 2 high
+      digitalWrite(MOTOR1PIN, LOW);   // set leg 1 of the H-bridge low
+      digitalWrite(MOTOR2PIN, HIGH);  // set leg 2 of the H-bridge high
+      digitalWrite(MOTOR1PIN2, LOW);   // set leg 1 of the H-bridge side 2 low
+      digitalWrite(MOTOR2PIN2, HIGH);  // set leg 2 of the H-bridge side 2 high
+   }
+   if (distance >= 200 || distance <= 0)
+   {
+    Serial.println("Out of range");
+   }
+  else 
+  {
+    Serial.print(distance);
+    Serial.println(" cm");
+  }
+      
+}
